@@ -1,0 +1,57 @@
+<div class="">
+  <%= form_tag "/crawler/plans/test", method:'get', class:'form-horizontal' do %>
+      <div class="form-group">
+        <label class='col-sm-2 control-label' for="plan_id">选择条件:</label>
+        <div class="col-sm-7">
+          <%= select_tag "plan_id", options_for_select(@plans.map{|p| [p.name, p.id]}), class:'form-control' %>
+        </div>
+        <div class="col-sm-3">
+          <%= link_to '创建计划', '/crawler/plans/new', class:'btn btn-primary' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class='col-sm-2 control-label' for="page">第几页?:</label>
+        <div class="col-sm-10">
+          <%= text_field_tag :page, params[:page].nil? ? '1' : params[:page] %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <%= submit_tag "测试",class:'btn btn-default' %>
+        </div>
+      </div>
+  <% end %>
+</div>
+
+<div class="gd h500">
+  <% if @doc %>
+      <div class="table-responsive">
+        <h4 class="sub-header text-center">条件:<%= @plan.name %>(第<%= @doc[:page] %>页,共<%= @doc[:pagecount] %>页)</h4>
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>序号</th>
+            <th>工作名称</th>
+            <th>公司名称</th>
+            <th>工作地址</th>
+            <th>工资范围</th>
+            <th>发布时间</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @doc[:works].each_with_index do |w, i| %>
+              <tr>
+                <td><%= i+1 %></td>
+                <td><%= link_to w[:work_name], w[:work_url] %></td>
+                <td><%= link_to w[:company_name], w[:company_url] %></td>
+                <td><%= w[:work_address] %></td>
+                <td><%= w[:work_price] %></td>
+                <td><%= w[:work_time] %></td>
+              </tr>
+          <% end %>
+          </tbody>
+
+        </table>
+      </div>
+  <% end %>
+</div>

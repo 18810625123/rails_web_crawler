@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<div class="page-header">
+  <p class="lead">
+    采集计划:<%= @crawler_plan.name %><br/>
+    目标站点:<%= link_to @crawler_plan.website.name, @crawler_plan.website.index_url %><br/>
+    目标URL:<br/><%= link_to @crawler_plan.url, @crawler_plan.url.split('PAGE').join('1') %><br/>
+    备注:<%= @crawler_plan.note %><br/>
+  </p>
+</div>
+
+<%= link_to '去采集', exce_crawler_plan_path(@crawler_plan), class:'btn btn-default' %>
+
+<%= link_to '修改', edit_crawler_plan_path(@crawler_plan), class:'btn btn-default' %>
+<%= link_to '返回', crawler_plans_path, class:'btn btn-default' %>

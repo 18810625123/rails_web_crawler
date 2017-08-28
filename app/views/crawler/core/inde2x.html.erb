@@ -1,0 +1,145 @@
+
+<div class="w_100 h50 top0 pd10" style="position:fixed;background-color:#3399CC;z-index:9999">
+  <div class="fl" style="width:20%;">
+    <!--<a href="/" class="button button-glow button-rounded button-tiny">返回</a>-->
+  </div>
+  <div class="fl text-center" style="width:60%">
+    <h3>爬虫系统首页</h3>
+  </div>
+  <div class="fl" style="width:20%">
+    <!--<a href="/" class="fr button button-glow button-rounded button-tiny">首页</a>-->
+
+  </div>
+</div>
+<div class="h50"></div>
+
+
+
+<div class="pd10">
+
+  <!--title-->
+
+
+  <!--基础数据-->
+  <div class="bo-a mb15 pd10">
+    <a class="button button-royal button-rounded button-plus mb15" onclick="display_div($('#base_data_div'))">基础数据</a>
+    <div id="base_data_div" class="">
+
+
+      <div class=" pos-rel">
+        <!--webtypes-->
+        <div class="fl table-responsive w_30 bo-a">
+          <h4 class="sub-header text-center">webtypes</h4>
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>id</th>
+              <th>名称</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @webtypes.each do |webtype| %>
+                <tr>
+                  <td><%= webtype.id %></td>
+                  <td><%= webtype.name %></td>
+                </tr>
+            <% end %>
+            </tbody>
+
+          </table>
+        </div>
+
+        <!--webs-->
+        <div class="fr table-responsive w_65 bo-a">
+          <h4 class="sub-header text-center">webs</h4>
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>id</th>
+              <th>主页</th>
+              <th>类别</th>
+              <th>备注</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @webs.each do |web| %>
+                <tr>
+                  <td><%= web.id %></td>
+                  <td><%= web.url %></td>
+                  <td><%= web.web_type.name %></td>
+                  <td><%= web.note %></td>
+                  <td>
+                    <%= link_to '新建计划','/create_table?web_id='+web.id.to_s %> |
+                  </td>
+                </tr>
+            <% end %>
+            </tbody>
+
+          </table>
+        </div>
+
+        <div style="clear:both"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!--采集列表-->
+  <div class="bo-a mb15 pd10">
+    <a class="button button-royal button-rounded button-plus mb15" onclick="display_div($('#table_list_div'))">采集列表</a>
+
+    <div id="table_list_div" class="pos-rel">
+      <div class="mb15">
+        <a class="button button-primary button-rounded button-small">新建</a>
+        <a class="button button-primary button-rounded button-small">新建</a>
+        <a class="button button-primary button-rounded button-small">新建</a>
+      </div>
+      <div class="mb15">
+        <div class="control-group ">
+          表名:<input name="name" class='span3' type="text" />
+          描述:<input name='desc' type="text" />
+          <a class="button button-primary button-rounded button-tiny">搜索</a>
+        </div>
+      </div>
+      <div class="bo-a pos-rel">
+      <% @tables.each_with_index do |t, i| %>
+          <!--table-->
+          <div class="fl table-responsive pd20" style="width:50%">
+            <h4 class="sub-header text-center"><%= "#{t.name}(#{t.desc})" %></h4>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>名称</th>
+                <th>类型</th>
+                <th>描述</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% t.fields.each do |f| %>
+                  <tr>
+                    <td><%= f.name %></td>
+                    <td><%= f.datatype %></td>
+                    <td><%= f.desc %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+
+            </table>
+          </div>
+      <% end %>
+        <div style="clear:both"></div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+<div class="text-center w_100 h50 bottom0 pd10" style="position:fixed;background-color:#3399CC">
+  <h3>A | B | C</h3>
+</div>
+<div class="h50"></div>
+

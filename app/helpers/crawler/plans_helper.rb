@@ -1,0 +1,2 @@
+module Crawler::PlansHelper
+end

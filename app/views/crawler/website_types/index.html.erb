@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Crawler Website Types</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Note</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @crawler_website_types.each do |crawler_website_type| %>
+      <tr>
+        <td><%= crawler_website_type.name %></td>
+        <td><%= crawler_website_type.note %></td>
+        <td><%= link_to 'Show', crawler_website_type %></td>
+        <td><%= link_to 'Edit', edit_crawler_website_type_path(crawler_website_type) %></td>
+        <td><%= link_to 'Destroy', crawler_website_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Crawler Website Type', new_crawler_website_type_path %>

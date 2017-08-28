@@ -1,0 +1,20 @@
+
+<div id="" class="w_100">
+
+  <div class="">
+
+  </div>
+
+
+  <div class="pos-rel w_80 pd10 mid">
+    <p id="notice" class="text-center"><%= notice %></p>
+    <h1 class="text-center mb15">城市 | <%= link_to '添加', new_city_path %></h1>
+
+    <% @cities.each_with_index do |city, i| %>
+        <div class="fl" style="width:16.2%">
+          <%= link_to city.name, city %>
+        </div>
+    <% end %>
+  </div>
+
+</div>

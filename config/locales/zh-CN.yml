@@ -1,0 +1,160 @@
+zh-CN:
+  time:
+    formats:
+      default: "%Y-%m-%d %H:%M:%S"
+  date:
+    formats:
+      default: "%Y-%m-%d"
+      short: "%b%d日"
+      long: "%Y年%b%d日"
+    day_names: [星期日, 星期一, 星期二, 星期三, 星期四, 星期五, 星期六]
+    abbr_day_names: [日, 一, 二, 三, 四, 五, 六]
+    month_names: [~, 一月, 二月, 三月, 四月, 五月, 六月, 七月, 八月, 九月, 十月, 十一月, 十二月]
+    abbr_month_names: [~, 1月, 2月, 3月, 4月, 5月, 6月, 7月, 8月, 9月, 10月, 11月, 12月]
+    order:
+      - :year
+      - :month
+      - :day
+  paperclip:
+    image:
+      required: 请选择文件
+      oversize: 请上传小于1M的图片
+      type_error: 不支持的图片格式
+  views:
+    pagination:
+      first: 首页
+      previous: 上一页
+      next: 下一页
+      last: 末页
+      truncate: "..."
+  breadcrumb:
+    defaults:
+      caiwu_audit_list: 财务审核
+      welcome: 欢迎
+      xuebuzhuren_audit_list: 学部主任审核
+      edit: 修改
+      new: 添加
+      sea_search: 比价
+      show: 查看
+      snatch_products: 抓取产品
+      items_index: 商城报价
+      snatch_index: 商品管理
+      items_ud_index: 报价管理
+      retrieve_index: 回收站
+      down_index: 已下架列表
+      room_use_list: 教室使用列表
+      room_use_info: 教室使用详情
+    notice_infos:
+      new: 发布通知
+      my_notice: 我的通知
+      more_notice: 新到通知
+  models:
+    content: 文档管理
+    contract: 合同管理
+    contract_of: 合同金额相关
+    contract_management: 合同栏目管理
+    nature: 开发合同项目属性
+    partner_nature: 合作伙伴合同项目属性
+    staff_contract: 员工合同管理
+    user: 用户
+    project: 项目
+    member: 成员
+    task: 任务
+    book: 图书
+    holiday: 节假日
+    borrow: 借阅
+    leave: 请假
+    setting: 系统设置
+    property: 资产管理
+    extra_work: 加班
+    rest_day: 调休
+    doc: 文档
+    track: 跟进
+    score: 绩效
+    document: 共享文档
+    catalog: 共享文档类型
+    comment: 共享文档评论
+    permission: 权限
+    role: 角色
+    operation_log: 操作日志
+    user_role: 用户角色关联
+    role_permission: 角色权限关联
+    picture: 图片
+    course: 课程介绍
+    article: 文章
+    fork: 预约
+    course_catalog: 课程分类
+    product: 产品
+    black_list: 关键词黑名单
+    category: 我的分类
+    item_comment: 评论
+    good: 商品
+    tops_role: 商城畅销产品规则
+    product_catalog: 财政部分类
+    job: 岗位
+    attachment: 文件
+    cost: 项目报销
+    mod: 费用类型
+    department: 部门管理
+    my_info: 个人信息
+    computer: 电脑
+    lender: 电脑使用登记
+    attendance: 考勤表管理
+    weekproject: 周计划
+    project_monitor: 项目监控
+    vote: 投票
+
+  unauthorized:
+    manage:
+      all: "你没有权限!"
+  number:
+    currency:
+      format:
+        unit: '¥'
+        delimiter: ','
+        separator: '.'
+        precision: 2
+        format: '%u%n'
+  datetime:
+    distance_in_words:
+      half_a_minute: "半分钟"
+      less_than_x_seconds:
+        one: "一秒"
+        other: "%{count}秒"
+      x_seconds:
+        one: "一秒"
+        other: "%{count}秒"
+      less_than_x_minutes:
+        one: "一分钟"
+        other: "%{count}分钟"
+      x_minutes:
+        one: "一分钟"
+        other: "%{count}分钟"
+      about_x_hours:
+        one: "一小时"
+        other: "%{count}小时"
+      x_days:
+        one: "一天"
+        other: "%{count}天"
+      about_x_months:
+        one: "一个月"
+        other: "%{count}个月"
+      x_months:
+        one: "一个月"
+        other: "%{count}个月"
+      about_x_years:
+        one: "一年"
+        other: "%{count}年"
+      over_x_years:
+        one: "大于一年"
+        other: "大于%{count}年"
+      almost_x_years:
+        one:   "接近一年"
+        other: "接近%{count}年"
+    prompts:
+      year:   "年"
+      month:  "月"
+      day:    "日"
+      hour:   "时"
+      minute: "分"
+      second: "秒"

@@ -1,0 +1,159 @@
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#panel-0" data-toggle="tab">图形</a></li>
+    <li><a href="#panel-1" data-toggle="tab">a<span class="badge"><%=  %></span></a></li>
+    <li><a href="#panel-2" data-toggle="tab">b<span class="badge"><%=  %></span></a></li>
+    <li><a href="#panel-3" data-toggle="tab">c<span class="badge"><%=  %></span></a></li>
+    <li><a href="#panel-4" data-toggle="tab">d<span class="badge"><%=  %></span></a></li>
+    <li><a href="#panel-5" data-toggle="tab">e<span class="badge"><%=  %></span></a></li>
+    <li><a href="#panel-6" data-toggle="tab">f<span class="badge"><%=  %></span></a></li>
+    <li class="dropdown pull-right">
+      <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+        操作 <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="#">全部保存</a>
+        </li>
+        <li>
+          <a href="#">全部放弃</a>
+        </li>
+        <li class="divider"><br></li>
+        <li>
+          <a href="#">分割线</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="panel-0">
+      <div class="page-header text-center">
+        <p class="lead">
+          全国全渠道所有ruby rails的职位共<%= @ruby_rails_results[:count_sum] %>个<br/>
+          共分布在<%= @ruby_rails_results[:citys].size %>个城市<br/>
+        </p>
+      </div>
+      <div class=''>
+        <h4>前五的城市需求共<%= @ruby_rails_results[:first5].map{|a| a[1]}.sum %>个,占比<%= (@ruby_rails_results[:first5].map{|a| a[1]}.sum/@ruby_rails_results[:count_sum].to_f).round(4)*100 %>%:</h4>
+        <% @ruby_rails_results[:first5].each do |arr| %>
+            <%= "#{arr[0]}:#{arr[1]}(#{(arr[1].to_f/@ruby_rails_results[:count_sum].to_f).round(4)*100}%)" %><br/>
+        <% end %>
+      </div>
+      <div>
+        <canvas id="pie" width="400" height="400" class="bo-a"></canvas>
+        <canvas id="pie2" width="400" height="400" class="bo-a"></canvas>
+        <!--<canvas id="line" width="400" height="400"  class="bo-a"></canvas>-->
+        <!--<canvas id="bar" width="400" height="400"  class="bo-a"></canvas>-->
+      </div>
+    </div>
+    <div class="tab-pane" id="panel-1">a
+      <%#= render :partial => '/crawler/works/work_table_list', :locals => { :works => @job51_rubys } %>
+    </div>
+    <div class="tab-pane" id="panel-2">b
+      <%#= render :partial => '/crawler/works/work_table_list', :locals => { :works => @boss_rubys } %>
+    </div>
+    <div class="tab-pane" id="panel-3">c
+      <%#= render :partial => '/crawler/works/work_table_list', :locals => { :works => @lagou_rubys } %>
+    </div>
+    <div class="tab-pane" id="panel-4">d
+      <%#= render :partial => '/crawler/works/work_table_list', :locals => { :works => @job51_rails } %>
+    </div>
+    <div class="tab-pane" id="panel-5">e
+      <%#= render :partial => '/crawler/works/work_table_list', :locals => { :works => @boss_rails } %>
+    </div>
+    <div class="tab-pane" id="panel-6">f
+      <%#= render :partial => '/crawler/works/work_table_list', :locals => { :works => @lagou_rails } %>
+    </div>
+  </div>
+</div>
+
+<script>
+
+    var pie_data = [
+        {
+            value: 30,
+            color:"#F38630"
+        },
+        {
+            value : 50,
+            color : "#E0E4CC"
+        },
+        {
+            value : 100,
+            color : "#69D2E7"
+        }
+    ]
+    var pie = document.getElementById("pie").getContext("2d");
+    new Chart(pie).Pie(pie_data,{});
+
+    var pie2_data = [
+        {
+            value: 30,
+            color:"#F7464A"
+        },
+        {
+            value : 50,
+            color : "#E2EAE9"
+        },
+        {
+            value : 100,
+            color : "#D4CCC5"
+        },
+        {
+            value : 40,
+            color : "#949FB1"
+        },
+        {
+            value : 120,
+            color : "#4D5360"
+        }
+
+    ]
+    var pie2 = document.getElementById("pie2").getContext("2d");
+    new Chart(pie2).Doughnut(pie2_data,{});
+
+//    var line_data = {
+//        labels : ["January","February","March","April","May","June","July"],
+//        datasets : [
+//            {
+//                fillColor : "rgba(220,220,220,0.5)",
+//                strokeColor : "rgba(220,220,220,1)",
+//                pointColor : "rgba(220,220,220,1)",
+//                pointStrokeColor : "#fff",
+//                data : [65,59,90,81,56,55,40]
+//            },
+//            {
+//                fillColor : "rgba(151,187,205,0.5)",
+//                strokeColor : "rgba(151,187,205,1)",
+//                pointColor : "rgba(151,187,205,1)",
+//                pointStrokeColor : "#fff",
+//                data : [28,48,40,19,96,27,100]
+//            }
+//        ]
+//    }
+//    var line = document.getElementById("line").getContext("2d");
+//    new Chart(line).Line(line_data,{});
+//
+//    var bar_data = {
+//        labels : ["January","February","March","April","May","June","July"],
+//        datasets : [
+//            {
+//                fillColor : "rgba(220,220,220,0.5)",
+//                strokeColor : "rgba(220,220,220,1)",
+//                data : [65,59,90,81,56,55,40]
+//            },
+//            {
+//                fillColor : "rgba(151,187,205,0.5)",
+//                strokeColor : "rgba(151,187,205,1)",
+//                data : [28,48,40,19,96,27,100]
+//            }
+//        ]
+//    }
+//    var bar = document.getElementById("bar").getContext("2d");
+//    new Chart(bar).Bar(bar_data,{});
+
+
+</script>
+
+

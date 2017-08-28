@@ -1,0 +1,59 @@
+<div class="table-responsive">
+  <table class="table table-hover table-condensed">
+    <thead>
+    <tr>
+      <th width="4%"></th>
+      <th width="20%">名称</th>
+      <th width="20%">公司</th>
+      <th>地点</th>
+      <th>类别</th>
+      <th>来源</th>
+      <th>更新?</th>
+      <th>最低</th>
+      <th>最高</th>
+      <th>时间</th>
+      <th><%= check_box_tag :check_qx, 'check_qx', false %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% works.each_with_index do |w, i| %>
+        <tr>
+          <td><%= i+1 %></td>
+          <td><%= link_to w.name, w.url %></td>
+          <td><%= link_to w.company_name, w.company_url %></td>
+          <td><%= w.address %></td>
+          <td><%= w.category %></td>
+          <td><%= w.website.name %></td>
+          <td><%= w.tracking %></td>
+          <td><%= w.price_min %></td>
+          <td><%= w.price_max %></td>
+          <td><%= w.send_time %></td>
+          <td><%= check_box_tag :w_id, w.id, false %></td>
+        </tr>
+    <% end %>
+    </tbody>
+
+  </table>
+</div>
+
+<script>
+    $('#check_qx').click(function(){
+        if(this.checked){
+            $('input[name=w_id]').each(function(){
+                this.checked = true;
+            });
+        }else{
+            $('input[name=w_id]').each(function(){
+                this.checked = false;
+            });
+        }
+    });
+//  var all_checked = function(e){
+//      alert($(e).checked);
+//      cs = $('input[type="w_id"]');
+//      for(var i=0;i<cs.length;i++){
+//          cs.eq(i).attr('checked',true);
+//      }
+//  }
+
+</script>

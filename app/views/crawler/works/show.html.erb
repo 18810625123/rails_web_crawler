@@ -1,0 +1,79 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @crawler_work.name %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @crawler_work.url %>
+</p>
+
+<p>
+  <strong>Text:</strong>
+  <%= @crawler_work.text %>
+</p>
+
+<p>
+  <strong>Company name:</strong>
+  <%= @crawler_work.company_name %>
+</p>
+
+<p>
+  <strong>Company url:</strong>
+  <%= @crawler_work.company_url %>
+</p>
+
+<p>
+  <strong>Price scope:</strong>
+  <%= @crawler_work.price_scope %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @crawler_work.address %>
+</p>
+
+<p>
+  <strong>Price min:</strong>
+  <%= @crawler_work.price_min %>
+</p>
+
+<p>
+  <strong>Price max:</strong>
+  <%= @crawler_work.price_max %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @crawler_work.city %>
+</p>
+
+<p>
+  <strong>Company:</strong>
+  <%= @crawler_work.company_id %>
+</p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @crawler_work.category %>
+</p>
+
+<p>
+  <strong>Website:</strong>
+  <%= @crawler_work.website_id %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @crawler_work.note %>
+</p>
+
+<p>
+  <strong>Send time:</strong>
+  <%= @crawler_work.send_time %>
+</p>
+
+<%= link_to 'Edit', edit_crawler_work_path(@crawler_work) %> |
+<%= link_to 'Back', crawler_works_path %>

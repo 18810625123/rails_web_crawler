@@ -1,0 +1,2 @@
+module Crawler::MenusHelper
+end

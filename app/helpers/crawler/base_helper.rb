@@ -1,0 +1,2 @@
+module Crawler::BaseHelper
+end

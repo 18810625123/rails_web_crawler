@@ -1,0 +1,36 @@
+<!--计划首页-显示所有计划-->
+<div class="table-responsive">
+  <table class="table table-hover table-condensed">
+    <thead>
+    <tr>
+      <th>命空空间</th>
+      <th>控制器</th>
+      <th>Action</th>
+      <th>父菜单</th>
+      <th>菜单名</th>
+      <th colspan="6">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @crawler_menus.each do |menu| %>
+        <tr>
+          <td><%= menu.namespace %></td>
+          <td><%= menu.controller %></td>
+          <td><%= menu.action %></td>
+          <td><%= menu.owner.name if menu.owner %></td>
+          <td><%= link_to menu.name, menu.url %></td>
+          <td><%= link_to '编辑', edit_crawler_menu_path(menu) if menu.name != '系统首页' %></td>
+          <td><%= link_to '删除', menu, method: :delete, data: { confirm: 'Are you sure?' } if menu.name != '系统首页' %></td>
+          <td><%= link_to '顶', "/crawler/menus/#{menu.id}/move?move=顶" %></td>
+          <td><%= link_to '上', "/crawler/menus/#{menu.id}/move?move=上" %></td>
+          <td><%= link_to '下', "/crawler/menus/#{menu.id}/move?move=下" %></td>
+          <td><%= link_to '底', "/crawler/menus/#{menu.id}/move?move=底" %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+</div>
+
+
+<%= link_to '新建菜单', new_crawler_menu_path %>

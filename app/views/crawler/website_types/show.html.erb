@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @crawler_website_type.name %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @crawler_website_type.note %>
+</p>
+
+<%= link_to 'Edit', edit_crawler_website_type_path(@crawler_website_type) %> |
+<%= link_to 'Back', crawler_website_types_path %>

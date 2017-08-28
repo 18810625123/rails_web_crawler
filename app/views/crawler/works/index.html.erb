@@ -1,0 +1,116 @@
+<div class="alert alert-success alert-dismissable text-center">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+  <%= "共搜索到结果#{@count}条,#{@pagecount}页" %>
+</div>
+
+<div class="row clearfix">
+  <div class="col-md-12 column">
+  <%= search_form_for @q, class:'form-horizontal', method:'get' do |f| %>
+      职位包含<%= f.search_field :name_cont %>
+        职位不包含<%= f.search_field :name_not_cont %><br/>
+
+        公司包含<%= f.search_field :company_name_cont %>
+        公司不包含<%= f.search_field :company_name_not_cont %><br/>
+
+        工资包含<%= f.search_field :price_scope_cont %>
+        工资不包含<%= f.search_field :price_scope_not_cont %><br/>
+
+        最低工资小于<%= f.search_field :price_min_lt %>
+        最低工资大于<%= f.search_field :price_min_gt %><br/>
+
+        最高工资小于<%= f.search_field :price_max_lt %>
+        最高工资大于<%= f.search_field :price_max_gt %><br/>
+
+        按字段排序<%= text_field_tag :order, @order %>
+        是否更新?<%= f.select :tracking_eq, ['yes','no'], { :include_blank => true } %><br/>
+
+      城市<%= f.select :address_cont, Crawler::Work.citys, { :include_blank => true } %>
+      分类<%= f.select :category_eq, Crawler::Work.categroys, { :include_blank => true } %>
+      来源<%= f.select :website_id_eq, Crawler::Website.all.map{|w| [w.name,w.id]}, { :include_blank => true } %>
+      <%= f.submit "搜索",class:'btn btn-default' %>
+        每页显示条数<%= number_field_tag :per, @per %>
+  <% end %>
+  </div>
+</div>
+
+
+
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#panel-1" data-toggle="tab">表单</a></li>
+    <li><a href="#panel-2" data-toggle="tab">处理<span class="badge"></span></a></li>
+    <li><a href="#panel-3" data-toggle="tab">其它其它<span class="badge"></span></a></li>
+    <li><a href="#panel-4" data-toggle="tab">图形<span class="badge"></span></a></li>
+    <li class="dropdown pull-right">
+      <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+        操作 <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="javascript:handle('tracking_all');">全部保存</a>
+        </li>
+        <li>
+          <a href="javascript:handle('del_all');" data-confirm="确定要全部删除吗?真的确认?">全部删除</a>
+        </li>
+        <li class="divider"><br></li>
+        <li>
+          <a href="#">分割线</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="panel-1">
+      <div class="gd h500">
+        <%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works } %>
+      </div>
+      <div>
+        <%= paginate @works %>
+      </div>
+    </div>
+    <div class="tab-pane" id="panel-2">
+      处理
+    </div>
+    <div class="tab-pane" id="panel-3">
+      其它
+    </div>
+    <div class="tab-pane" id="panel-4">
+      <canvas id="line" width="400" height="400"  class="bo-a"></canvas>
+      <canvas id="bar" width="400" height="400"  class="bo-a"></canvas>
+      <canvas id="pie" width="400" height="400" class="bo-a"></canvas>
+      <canvas id="pie2" width="400" height="400" class="bo-a"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+  var handle = function(handle){
+      w_ids = [];
+      $('input[name=w_id]').each(function(){
+          if(this.checked){
+              w_ids.push(this.value);
+          }
+      })
+      $.ajax({
+          url:'/crawler/works/handle.json',
+          method:'post',
+          data:{
+              w_ids:w_ids,
+              handle:handle,
+          },
+          success:function(data){
+              if(data.ok){
+
+              }else{
+
+              }
+              alert(data.msg);
+          }
+      });
+  }
+</script>
+
+
+
+

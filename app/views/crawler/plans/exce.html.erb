@@ -1,0 +1,96 @@
+<div class="page-header ">
+  <p class="lead">
+    采集计划:<%= link_to @crawler_plan.name, crawler_plan_path(@crawler_plan) %>&nbsp;&nbsp;
+    目标站点:<%= link_to @crawler_plan.website.name, @crawler_plan.website.index_url %><br/>
+  </p>
+</div>
+
+<div>
+  <%= form_tag exce_crawler_plan_path, method:'post', class:"form-horizontal" do %>
+      <div class="form-group">
+        <label class='col-sm-2 control-label' for="page_a">页码</label>
+        <div class="col-sm-10">
+          <%= text_field_tag :page_a, params[:page_a], placeholder:'开始页码(必填)' %>
+          <%= text_field_tag :page_b, params[:page_b], placeholder:'截止页码(必填)' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class='col-sm-2 control-label' for="filter_work_name">过滤</label>
+        <div class="col-sm-10">
+          <%= text_field_tag :filter_work_name, params[:filter_work_name], placeholder:'从标题中过滤关键字' %>
+          <%= text_field_tag :include_work_name, params[:include_work_name], placeholder:'标题中必须出现关键字' %>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class='col-sm-2 control-label' for="stop_count"></label>
+        <div class="col-sm-8">
+          <%= submit_tag "手动采集",class:'btn btn-default' %>
+          直接保存?<%= check_box_tag :save_flag, 'yes', true %>
+        </div>
+      </div>
+
+  <% end %>
+</div>
+
+<!--结果页签-->
+<div class="text-center">
+  <% if @flag %>
+      <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <%= @msg %>
+      </div>
+      <div class="tabbable">
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#panel-1" data-toggle="tab">成功采集<span class="badge"><%= @works[:success].size %></span>条</a>
+          </li>
+          <li>
+            <a href="#panel-2" data-toggle="tab">保存失败<span class="badge"><%= @works[:fail].size %></span>条</a>
+          </li>
+          <li>
+            <a href="#panel-3" data-toggle="tab">过滤的<span class="badge"><%= @works[:filter].size %></span>条</a>
+          </li>
+          <li>
+            <a href="#panel-4" data-toggle="tab">未保存的<span class="badge"><%= @works[:no_save].size %></span>条</a>
+          </li>
+          <li class="dropdown pull-right">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+              操作 <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#">全部保存</a>
+              </li>
+              <li>
+                <a href="#">全部放弃</a>
+              </li>
+              <li class="divider"><br></li>
+              <li>
+                <a href="#">分割线</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane active" id="panel-1">
+            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:success] } %></div>
+          </div>
+          <div class="tab-pane" id="panel-2">
+            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:fail] } %></div>
+          </div>
+          <div class="tab-pane" id="panel-3">
+            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:filter] } %></div>
+          </div>
+          <div class="tab-pane" id="panel-4">
+            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:no_save] } %></div>
+          </div>
+        </div>
+      </div>
+  <% else %>
+      <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <%= @msg %>
+      </div>
+  <% end %>
+</div>

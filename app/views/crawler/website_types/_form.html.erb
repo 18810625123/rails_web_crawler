@@ -1,0 +1,27 @@
+<%= form_with(model: crawler_website_type, local: true) do |form| %>
+  <% if crawler_website_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(crawler_website_type.errors.count, "error") %> prohibited this crawler_website_type from being saved:</h2>
+
+      <ul>
+      <% crawler_website_type.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :crawler_website_type_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :note %>
+    <%= form.text_field :note, id: :crawler_website_type_note %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

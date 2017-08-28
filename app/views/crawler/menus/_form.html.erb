@@ -1,0 +1,47 @@
+<%= form_with(model: crawler_menu) do |form| %>
+  <% if crawler_menu.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(crawler_menu.errors.count, "error") %> prohibited this crawler_menu from being saved:</h2>
+
+      <ul>
+      <% crawler_menu.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :crawler_menu_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :namespace %>
+    <%= form.text_field :namespace, value:'crawler', id: :crawler_menu_namespace %>
+  </div>
+
+  <div class="field">
+    <%= form.label :controller %>
+    <%= form.text_field :controller, id: :crawler_menu_controller %>
+  </div>
+
+  <div class="field">
+    <%= form.label :action %>
+    <%= form.text_field :action, id: :crawler_menu_action %>
+  </div>
+
+  <div class="field">
+    <%= form.label :note %>
+    <%= form.text_field :note, id: :crawler_menu_note %>
+  </div>
+
+  <div class="field">
+    <%= form.label :parent_id %>
+    <%= form.select :parent_id, Crawler::Menu.all.map{|m| [m.name, m.id]}.unshift(['无',nil]) %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit submit_name %>
+  </div>
+<% end %>

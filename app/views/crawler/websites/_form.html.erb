@@ -1,0 +1,37 @@
+<%= form_with(model: crawler_website, local: true) do |form| %>
+  <% if crawler_website.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(crawler_website.errors.count, "error") %> prohibited this crawler_website from being saved:</h2>
+
+      <ul>
+      <% crawler_website.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :crawler_website_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :index_url %>
+    <%= form.text_field :index_url, id: :crawler_website_index_url %>
+  </div>
+
+  <div class="field">
+    <%= form.label :website_type_id %>
+    <%= form.select :website_type_id, Crawler::WebsiteType.all.map{|t| [t.name,t.id]} %>
+  </div>
+
+  <div class="field">
+    <%= form.label :note %>
+    <%= form.text_field :note, id: :crawler_website_note %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

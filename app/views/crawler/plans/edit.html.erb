@@ -1,0 +1,9 @@
+<div class="page-header text-center">
+  <h1>修改数据采集计划</h1>
+  <p class="lead">
+  </p>
+</div>
+<%= render 'form', crawler_plan: @crawler_plan, submit_name: "修改" %>
+
+<%= link_to '显示', @crawler_plan %> |
+<%= link_to '返回', crawler_plans_path %>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>数据挖掘</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta name="keywords" content="求职,民宿,旅游,管理系统,数据挖掘,51job,前程无忧,BOSS直聘,拉勾网,IT技术,创业" />
+    <meta name="description" content="求职,民宿,旅游,数据挖掘,管理系统,51job,前程无忧,BOSS直聘,拉勾网,IT技术,创业" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=0, minimum-scale=0.5, maximum-scale=0.5">
+    <%= csrf_meta_tags %>
+    <!--css-->
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <!--js-->
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+
+  <div class="container">
+
+    <!--头部-->
+    <div class="row clearfix">
+      <div class="col-md-12 column">
+        <div class="page-header">
+          <h1>数据挖掘<small>系统</small></h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <!--菜单-->
+      <div class="col-md-2 column">
+        <div class="list-group">
+          <% @menus.each do |menu| %>
+              <%= link_to menu.name, menu.url, class:"list-group-item #{'active' if menu==@current_menu}" %>
+          <% end %>
+        </div>
+        <!--<div class="list-group">-->
+          <!--<%# @menus.each do |menu| %>-->
+                <!--<%#= link_to menu.name, "#menu-#{menu.id}", class:"list-group-item #{'active' if menu==@current_menu}", "data-toggle"=>"collapse" %>-->
+                <!--<div id="menu-<%#= menu.id %>" class="panel-collapse collapse"  %>">-->
+                  <!--<%# menu.childs.each do |m| %>-->
+                      <!--<%#= link_to "——#{m.name}", m.url, class:"list-group-item #{'active' if m==@current_menu}" %>-->
+                  <!--<%# end %>-->
+                <!--</div>-->
+
+          <!--<%# end %>-->
+        <!--</div>-->
+      </div>
+
+      <div class="col-md-10 column">
+
+        <!--导航-->
+        <div class="row clearfix">
+          <div class="col-md-12 column">
+            <ul class="breadcrumb">
+              <% @navs.each do |menu| %>
+                  <li><%= link_to menu.name, menu.url, style:"#{'color:orange' if menu==@current_menu}" %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+
+        <!--核心内容-->
+        <div class="row clearfix">
+          <div class="col-md-12 column">
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!--公司-->
+    <div class="page-header"></div>
+    <p class="text-center">© 2017 Zyythsx Inc.</p>
+    
+  </div>
+
+
+
+  </body>
+
+
+</html>
