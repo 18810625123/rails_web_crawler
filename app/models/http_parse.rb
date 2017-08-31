@@ -26,8 +26,11 @@ class HttpParse
     page = @doc.search('span[@class="dw_c_orange"]').last.html.to_i
     divs = @doc.search('div[@class="el"]')
     html = {page:page,pagecount:pagecount,works:[]}
-    6.upto(divs.size-1).each do |i|
+    name = divs[3].search('a').last.html
+
+    3.upto(divs.size-1).each do |i|
       arr = divs[i].search('a')
+      next if arr.size != 2
       arr2 = divs[i].search('span')
       html[:works] << {
           company_name:arr.last.html,

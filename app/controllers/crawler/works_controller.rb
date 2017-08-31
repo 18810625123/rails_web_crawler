@@ -23,7 +23,7 @@ class Crawler::WorksController < Crawler::BaseController
     if params[:handle] and params[:w_ids]
       @works = Crawler::Work.where('id in (?)',params[:w_ids])
       case params[:handle]
-        when 'destroy_all'
+        when 'del_all'
           @works.destroy_all
           @msg = "成功删除#{@works.size}条"
         when 'tracking_all'

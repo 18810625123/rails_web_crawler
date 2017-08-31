@@ -1,0 +1,93 @@
+<div class="page-header text-center">
+  <p class="lead">
+    <%= cond %>统计
+  </p>
+</div>
+
+<div id="<%= cond %>-div1" class="text-center"></div>
+<br/>
+<br/>
+<div id="<%= cond %>-div2" class="text-center"></div>
+
+
+
+
+
+
+<script>
+
+var cond = '<%= cond %>';
+var colors = {
+    '0':'#996699',
+    '1':'#CCFFFF',
+    '2':'#99CCFF',
+    '3':'#CC00FF',
+    '4':'#CC99FF',
+    '5':'#CCCC99',
+    '6':'#FF9999',
+    '7':'#FFFFCC',
+    '8':'#996699',
+    '9':'#993366',
+    '10':'#6666FF',
+}
+
+$(document).ready(function(){
+
+    $.ajax({
+        url:'/api/stat_work',
+        method:'get',
+        data:{
+            cond:cond,
+        },
+        success:function(data){
+            if(data.ok){
+                $("#"+cond+"-div1").html(`
+                <p> 全国`+data.data.city_total+`个城市在招`+data.data.cond+`岗位`+data.data.work_total+`个:</p>
+                <canvas id=`+cond+`-pie height="300" width="300"></canvas>
+                <p> 其中前五个城市共占岗位`+data.data.first5_citys.total+`个,占全国`+data.data.first5_citys.rate+`%</p>
+                <p> `+data.data.first5_citys.names+`</p>
+                `)
+                first5_citys = data.data.first5_citys.results;
+                citys = [];
+                for(var i=0;i<first5_citys.length;i++){
+                    citys.push({
+                        value:first5_citys[i].size,
+                        color:colors[i],
+                    });
+                }
+                var pie = document.getElementById(cond+"-pie").getContext("2d");
+                new Chart(pie).Doughnut(citys,{});
+
+
+                $("#"+cond+"-div2").html(`
+            <p>其中用人发布岗位最多的前10家公司:</p>
+                <canvas id=`+cond+`-line height="400" width="800"></canvas>
+                `)
+
+                first10_companys = data.data.first10_company.results;
+                company_names = [];
+                company_sizes = [];
+                for(var i=0;i<first10_companys.length;i++){
+                    company_names.push(first10_companys[i].name);
+                    company_sizes.push(first10_companys[i].size);
+                }
+                var line = document.getElementById(cond+"-line").getContext("2d");
+                new Chart(line).Bar({
+                    labels : company_names,
+                    datasets : [
+                        {
+                            fillColor : "orange",
+                            strokeColor : "red",
+                            data : company_sizes,
+                        },
+                    ],
+                },{});
+
+            }else{
+                alert(data.msg);
+            }
+        }
+    })
+});
+
+</script>

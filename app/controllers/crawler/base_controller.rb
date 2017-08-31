@@ -1,14 +1,18 @@
 class Crawler::BaseController < ApplicationController
   before_action :check_current_user
-  before_action :check_current_menu
+  before_action :get_current_menus
 
-  layout 'crawler'
+  layout :set_layout
+
+  def index
+
+  end
 
   def check_current_user
 
   end
 
-  def check_current_menu
+  def get_current_menus
     @all_menus = Crawler::Menu.all.order :location
     @index_menu = Crawler::Menu.find_by_name('系统首页')
     # @menus = @index_menu.children#.map{|m| m}.unshift(@index_menu)
@@ -29,4 +33,13 @@ class Crawler::BaseController < ApplicationController
     @navs = @current_menu.navs
   end
 
+  def set_layout
+    if !params[:layout].blank?
+      session[:layout] = params[:layout]
+    else
+      session[:layout] = session[:layout].nil? ? 'crawler' : session[:layout]
+    end
+    session[:layout]
+  end
+  
 end

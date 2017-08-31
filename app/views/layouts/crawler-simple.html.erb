@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>数据挖掘</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="renderer" content="webkit">
+  <meta name="keywords" content="求职,民宿,旅游,管理系统,数据挖掘,51job,前程无忧,BOSS直聘,拉勾网,IT技术,创业" />
+  <meta name="description" content="求职,民宿,旅游,数据挖掘,管理系统,51job,前程无忧,BOSS直聘,拉勾网,IT技术,创业" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=0, minimum-scale=0.5, maximum-scale=0.5">
+  <%= csrf_meta_tags %>
+  <!--css-->
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <!--js-->
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+
+<body>
+
+<div class="container">
+  <!--导航-->
+    <br/>
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <%= render '/layouts/nav' %>
+
+    </div>
+  </div>
+
+  <!--核心内容-->
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+
+      <%= yield %>
+    </div>
+  </div>
+
+  <!--公司-->
+  <div class="page-header"></div>
+  <p class="text-center">© 2017 Zyythsx Inc.</p>
+
+</div>
+
+
+
+</body>
+
+
+</html>

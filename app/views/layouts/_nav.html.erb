@@ -1,0 +1,16 @@
+<div class="row clearfix">
+  <div class="col-md-12 column">
+    <ul class="breadcrumb">
+      <% @navs.each do |menu| %>
+          <li><%= link_to menu.name, menu.url, style:"#{'color:orange' if menu==@current_menu}" %></li>
+      <% end %>
+      <li class="fr">
+        <%= link_to '简单', "/crawler?layout=crawler-simple" if session[:layout] == 'crawler' %>
+        <%= link_to '功能', "/crawler?layout=crawler" if session[:layout] == 'crawler-simple' %>
+      </li>
+
+    </ul>
+
+  </div>
+</div>
+

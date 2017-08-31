@@ -1,5 +1,6 @@
 class Crawler::Plan < ApplicationRecord
   belongs_to :website
+  has_many :works
 
 
   def exce_works data
@@ -32,8 +33,9 @@ class Crawler::Plan < ApplicationRecord
         w.send_time = wk[:work_time]
         w.address = wk[:work_address]
 
+        w.plan_id = id
         w.website_id = website.id
-        puts data.to_s
+
         if !data[:include].blank? and !w.name.include?(data[:include])
           works[:filter] << w
           next

@@ -74,16 +74,16 @@
 
         <div class="tab-content">
           <div class="tab-pane active" id="panel-1">
-            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:success] } %></div>
+            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:success].first(50) } %></div>
           </div>
           <div class="tab-pane" id="panel-2">
-            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:fail] } %></div>
+            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:fail].first(50) } %></div>
           </div>
           <div class="tab-pane" id="panel-3">
-            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:filter] } %></div>
+            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:filter].first(50) } %></div>
           </div>
           <div class="tab-pane" id="panel-4">
-            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:no_save] } %></div>
+            <div class="gd h500"><%= render :partial => '/crawler/works/work_table_list', :locals => { :works => @works[:no_save].first(50) } %></div>
           </div>
         </div>
       </div>

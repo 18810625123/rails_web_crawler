@@ -12,9 +12,6 @@
         公司包含<%= f.search_field :company_name_cont %>
         公司不包含<%= f.search_field :company_name_not_cont %><br/>
 
-        工资包含<%= f.search_field :price_scope_cont %>
-        工资不包含<%= f.search_field :price_scope_not_cont %><br/>
-
         最低工资小于<%= f.search_field :price_min_lt %>
         最低工资大于<%= f.search_field :price_min_gt %><br/>
 
@@ -22,13 +19,12 @@
         最高工资大于<%= f.search_field :price_max_gt %><br/>
 
         按字段排序<%= text_field_tag :order, @order %>
-        是否更新?<%= f.select :tracking_eq, ['yes','no'], { :include_blank => true } %><br/>
+        <!--是否更新?<%#= f.select :tracking_eq, ['yes','no'], { :include_blank => true } %><br/>-->
 
       城市<%= f.select :address_cont, Crawler::Work.citys, { :include_blank => true } %>
-      分类<%= f.select :category_eq, Crawler::Work.categroys, { :include_blank => true } %>
-      来源<%= f.select :website_id_eq, Crawler::Website.all.map{|w| [w.name,w.id]}, { :include_blank => true } %>
-      <%= f.submit "搜索",class:'btn btn-default' %>
-        每页显示条数<%= number_field_tag :per, @per %>
+      来源<%= f.select :website_id_eq, Crawler::Website.all.map{|w| [w.name,w.id]}, { :include_blank => true } %><br/>
+        每页显示条数<%= number_field_tag :per, @per %><%= f.submit "搜索",class:'btn btn-default' %>
+
   <% end %>
   </div>
 </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170828091414) do
+ActiveRecord::Schema.define(version: 20170829130248) do
 
   create_table "cities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
@@ -80,6 +80,9 @@ ActiveRecord::Schema.define(version: 20170828091414) do
     t.datetime "updated_at", null: false
     t.string "tracking", comment: "是否要更新"
     t.integer "parent_id", comment: "父(第一个版本的id)"
+    t.string "work_hash"
+    t.string "company_hash"
+    t.integer "plan_id"
   end
 
   create_table "provinces", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

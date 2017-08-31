@@ -7,6 +7,7 @@ class Crawler::PlansController < Crawler::BaseController
     @crawler_plans = Crawler::Plan.all
   end
 
+
   # 执行采集
   def exce
     @flag = false

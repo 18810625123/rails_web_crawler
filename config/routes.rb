@@ -4,7 +4,8 @@ Rails.application.routes.draw do
     resources :website_types
   end
   namespace :crawler do
-    get '/' => 'core#index'
+    get '/' => 'base#index'
+
     resources :websites
 
     resources :plans do

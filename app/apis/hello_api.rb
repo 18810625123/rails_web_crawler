@@ -1,13 +1,24 @@
-class HelloApi < Grape::API
 
-  use Rack::Cors do
-    allow do
-      origins '*'
-      resource '*', headers: :any, methods: :get
-    end
-  end
+class HelloApi < Grape::API
+  content_type :json, 'application/json;charset=utf-8'
+  # use Rack::Cors do
+  #   allow do
+  #     origins '*'
+  #     resource '*', headers: :any, methods: :get
+  #   end
+  # end
 
   format :json
+
+  get 'stat_work' do
+    if params[:cond]
+      t1=Time.now
+      data = Crawler::Work.stat params[:cond]
+      {ok:true,msg:"成功,共用时#{Time.now-t1}秒",data:data}
+    else
+      {ok:false,msg:'缺少cond条件'}
+    end
+  end
 
   get 'get_users' do
     {ok:true,msg:JSON.parse(User.all.to_json) }

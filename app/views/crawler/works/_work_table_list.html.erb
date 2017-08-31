@@ -5,8 +5,10 @@
       <th width="4%"></th>
       <th width="20%">名称</th>
       <th width="20%">公司</th>
-      <th>地点</th>
-      <th>类别</th>
+      <th>wkhash</th>
+      <th>cphash</th>
+      <th>城市</th>
+      <th>add</th>
       <th>来源</th>
       <th>更新?</th>
       <th>最低</th>
@@ -21,8 +23,10 @@
           <td><%= i+1 %></td>
           <td><%= link_to w.name, w.url %></td>
           <td><%= link_to w.company_name, w.company_url %></td>
+          <td><%= w.work_hash %></td>
+          <td><%= w.company_hash %></td>
+          <td><%= w.city %></td>
           <td><%= w.address %></td>
-          <td><%= w.category %></td>
           <td><%= w.website.name %></td>
           <td><%= w.tracking %></td>
           <td><%= w.price_min %></td>

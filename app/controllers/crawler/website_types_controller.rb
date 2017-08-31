@@ -1,4 +1,4 @@
-class Crawler::WebsiteTypesController < ApplicationController
+class Crawler::WebsiteTypesController < Crawler::BaseController
   before_action :set_crawler_website_type, only: [:show, :edit, :update, :destroy]
 
   # GET /crawler/website_types
