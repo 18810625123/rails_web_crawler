@@ -40,9 +40,9 @@ class Crawler::Work < ApplicationRecord
                              size:a[1]}}
     first10_company_work_sum = companys.map{|a| a[:size]}.sum
     first10_company_names = companys.map{|a| a[:name]}
-    all_city_names = citys.to_a.sort{|b,a| a[1]<=>b[1]}.first(5)
+    all_city_names = citys.to_a.sort{|b,a| a[1]<=>b[1]}
                          .map{|a| {name:a[0],
-                                   value:a[1]}}
+                                   value:(a[1]/work_sum.to_f*100).round(2)}}
     citys = citys.to_a.sort{|b,a| a[1]<=>b[1]}.first(5)
                 .map{|a| {name:a[0],
                           size:a[1],

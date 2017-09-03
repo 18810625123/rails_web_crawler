@@ -47,6 +47,7 @@ class Crawler::Plan < ApplicationRecord
     page_a.to_i.upto(page_b.to_i).each do |i|
       @current_page = i
       html_doc = get_html_by_page @current_page
+
       save_doc(html_doc, "/Users/liudong/Desktop/xml/#{website_name}-#{name}(#{page}).txt")
       case website_name
         when '前程无忧'
