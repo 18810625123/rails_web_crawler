@@ -28,6 +28,7 @@ class Crawler::PlansController < Crawler::BaseController
         @msg = "b页不能小于a"
         return
       end
+
       results = @crawler_plan.exce_works(a, b, params[:include_work_name], params[:filter_work_name], params[:save_flag])
       @works = results[:works]
       time = results[:time]

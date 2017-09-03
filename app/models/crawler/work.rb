@@ -12,7 +12,7 @@ class Crawler::Work < ApplicationRecord
       when '全部'
         ws = Crawler::Work.all
       else
-        ws = Crawler::Work.where("name like '%#{cond}%'")
+        ws = Crawler::Work.where("name like '%#{cond}%' and last_flag is true")
     end
     self.simple_stat ws, cond
   end

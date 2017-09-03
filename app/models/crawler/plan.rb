@@ -2,15 +2,15 @@ class Crawler::Plan < ApplicationRecord
   belongs_to :website
   has_many :works
 
+  WORKHASHS ||= {}
 
   def self.gen_work_hashs
-    workhashs = {}
-    Crawler::Work.order(:send_time).all.each do |w|
-      workhashs[w.work_hash] = w
+    if WORKHASHS.empty?
+      Crawler::Work.order(:send_time).all.each do |w|
+        WORKHASHS[w.work_hash] = w
+      end
     end
-    workhashs
   end
-  WORKHASHS ||= self.gen_work_hashs
 
   def today_finish
     self.note = "#{Date.today.to_s}/已完成"
@@ -41,6 +41,7 @@ class Crawler::Plan < ApplicationRecord
   end
 
   def exce_works page_a, page_b, include, filter, save_flag
+    Crawler::Plan.gen_work_hashs
     t1 = Time.now
     website_name = website.name
     @work_datas = {success:[],fail:[],filter:[],no_save:[],exist:[],update:[]}
