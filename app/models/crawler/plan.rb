@@ -3,65 +3,194 @@ class Crawler::Plan < ApplicationRecord
   has_many :works
 
 
-  def exce_works data
+  def self.gen_work_hashs
+    workhashs = {}
+    Crawler::Work.order(:send_time).all.each do |w|
+      workhashs[w.work_hash] = w
+    end
+    workhashs
+  end
+  WORKHASHS ||= self.gen_work_hashs
+
+  def today_finish
+    self.note = "#{Date.today.to_s}/已完成"
+    save
+  end
+
+  def today_finish?
+    return true if note == "#{Date.today.to_s}/已完成"
+    false
+  end
+
+  def http_url page
+    url.split('PAGE').join(page.to_s)
+  end
+
+  def get_html_by_page page
+    respone = open http_url(page)
+    result = respone.read
+    result = result.force_encoding('gbk').encode('utf-8') if result.encoding.to_s == "ASCII-8BIT"
+    html_doc = Hpricot(result)
+    html_doc
+  end
+
+  def save_doc html_doc, path
+      file = File.open(path, 'w+')
+      file.write html_doc.html
+      file.close
+  end
+
+  def exce_works page_a, page_b, include, filter, save_flag
     t1 = Time.now
     website_name = website.name
-    works = {success:[],fail:[],filter:[],no_save:[]}
-    data[:page][:a].upto(data[:page][:b]).each do |i|
-      http_url = url.split('PAGE').join(i.to_s)
-      http_doc = HttpParse.new(http_url)
-      http_doc.parse
-      http_doc.save("/Users/liudong/Desktop/xml/#{website_name}-#{name}(#{i}).txt")
+    @work_datas = {success:[],fail:[],filter:[],no_save:[],exist:[],update:[]}
+    page_a.to_i.upto(page_b.to_i).each do |i|
+      @current_page = i
+      html_doc = get_html_by_page @current_page
+      save_doc(html_doc, "/Users/liudong/Desktop/xml/#{website_name}-#{name}(#{page}).txt")
       case website_name
         when '前程无忧'
-          @doc = http_doc.parse_51job
+          doc = parse_51job_html(html_doc)
         when 'BOSS直聘'
-          @doc = http_doc.parse_boss
+          doc = parse_boss_html(html_doc)
         when '拉勾网'
-          @doc = http_doc.parse_lagou
+          doc = parse_lagou_html(html_doc)
         else
 
       end
-      @doc[:works].each do |wk|
+      doc[:works].each do |wk|
 
         w = Crawler::Work.new
         w.company_name = wk[:company_name]
         w.company_url = wk[:company_url]
-        w.name = wk[:work_name]
+        w.name = wk[:work_name].split('有限').first
         w.url = wk[:work_url]
+        if w.url.include?('.html')
+          w.work_hash = w.url.split('.html').first.split('/').last
+        else
+          w.work_hash = w.url.split('=').last
+        end
         w.price_scope = wk[:work_price]
         w.send_time = wk[:work_time]
         w.address = wk[:work_address]
 
         w.plan_id = id
-        w.website_id = website.id
+        w.website_id = website_id
 
-        if !data[:include].blank? and !w.name.include?(data[:include])
-          works[:filter] << w
+        if !include.blank? and !w.name.include?(include)
+          @work_datas[:filter] << w
           next
         end
-        if !data[:filter].blank? and w.name.include?(data[:filter])
-          works[:filter] << w
+        if !filter.blank? and w.name.include?(filter)
+          @work_datas[:filter] << w
           next
         end
 
-        if data[:save_flag] == 'yes'
+        update = false
+        if save_flag == 'yes'
+          old_wk = WORKHASHS[w.work_hash]
+          if old_wk
+            if w.send_time <= old_wk.send_time
+              @work_datas[:exist] << w
+              next
+            else
+              update = true
+            end
+          end
+          w.last_flag = true
           if w.save
-            works[:success] << w
+            WORKHASHS[w.work_hash] = w
+            if update
+              @work_datas[:update] << w
+            else
+              @work_datas[:success] << w
+            end
+            old_wk.update(last_flag:false) if old_wk
           else
-            works[:fail] << w
+            @work_datas[:fail] << w
           end
         else
-          works[:no_save] << w
+          @work_datas[:no_save] << w
         end
 
       end
-      sleep(2)
     end
     t2 = Time.now
     time = t2 - t1
-    [works, time]
-    
+    return {
+        ok:true,
+        works:@work_datas,
+        time:time,
+        a:page_a,
+        b:page_b,
+    }
+  rescue
+    return {
+        ok:false,
+        error:$!.to_s,
+        works:@work_datas,
+        time:(Time.now-t1),
+        error_page:@current_page,
+    }
+  end
+
+  def parse_51job_html html_doc
+    pagecount = html_doc.search('span[@class="td"]').first.html.split('共').last.split('页').first.to_i
+    page = html_doc.search('span[@class="dw_c_orange"]').last.html.to_i
+    divs = html_doc.search('div[@class="el"]')
+    doc = {page:page,pagecount:pagecount,works:[]}
+    name = divs[3].search('a').last.html
+
+    3.upto(divs.size-1).each do |i|
+      arr = divs[i].search('a')
+      next if arr.size != 2
+      arr2 = divs[i].search('span')
+      doc[:works] << {
+          company_name:arr.last.html,
+          company_url:arr.last['href'],
+          work_name:arr.first.html.split(' ').join('-'),
+          work_url:arr.first['href'],
+          work_price:arr2[3].html,
+          work_time:arr2[4].html,
+          work_address:arr2[2].html,
+      }
+    end
+    sleep(0.2)
+
+    doc
+  end
+
+  def parse_boss_html html_doc
+    lis = html_doc.search('div[@class="job-box"]').search('li')
+    doc = {page:nil,pagecount:nil,works:[]}
+    lis.each do |li|
+      doc[:works] << {
+          company_name:li.search('a').last.html,
+          company_url:li.search('a').last[:href],
+          work_name:li.search('a').first.html.split('<span').first,
+          work_url:li.search('a').first[:href],
+          work_price:li.search('span').first.html,
+          work_time:li.search('span').last.html.split('发布于').last.split('日').first.split('月').join('-'),
+          work_address:li.search('p').first.html.split('<em').first,
+      }
+    end
+    sleep(2)
+
+    doc
+  end
+
+  def flush_page
+    if website.name == '前程无忧'
+      html_doc = get_html_by_page 1
+      pagecount = html_doc.search('span[@class="td"]').first.html.split('共').last.split('页').first.to_i
+      if pagecount.to_i > 0
+        self.page = pagecount
+        puts "这个计划有#{pagecount}页"
+        save
+      else
+        false
+      end
+    end
   end
 
   def self.save_lagou_hash str

@@ -3,11 +3,28 @@
   <p class="lead">
     所有数据采集计划列表
   </p>
+
+</div>
+
+
+<div class="row clearfix">
+  <div class="col-md-12 column">
+    <%= search_form_for @q, class:'form-horizontal', method:'get' do |f| %>
+        名称<%= f.search_field :name_cont %>
+        来源<%= f.select :website_id_eq, Crawler::Website.all.map{|w| [w.name,w.id]}, { :include_blank => true } %>
+        <%= f.submit "搜索",class:'btn btn-default' %>
+
+    <% end %>
+  </div>
 </div>
 
 <!--计划首页-显示所有计划-->
 <div class="table-responsive">
   <table class="table table-hover table-condensed">
+    <div class="fr">
+      <!--<button onclick="flush_plans()">全部刷新</button>-->
+      <%= link_to '刷新计划', '/crawler/plans/flush' %>
+    </div>
     <thead>
     <tr>
       <th>序号</th>
@@ -24,15 +41,42 @@
           <td><%= link_to p.name, p %></td>
           <td><%= p.page %></td>
           <td><%= link_to p.website.name, p.website.index_url %></td>
-          <td><%= link_to '开始采集', exce_crawler_plan_path(p) %></td>
-          <td><%= link_to '修改计划', edit_crawler_plan_path(p) %></td>
+          <% if p.today_finish? %>
+              <td><%= '今日已完成' %></td>
+
+        <% else %>
+              <td><%= link_to '采集', exce_crawler_plan_path(p) %></td>
+              <td><%= link_to '今日已完成', today_finish_crawler_plan_path(p) %></td>
+
+        <% end %>
+          <td><%= link_to '修改', edit_crawler_plan_path(p) %></td>
+          <td><%= link_to '刷新页数', flush_page_crawler_plan_path(p) %></td>
           <td><%= link_to '删除', p, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>
     <% end %>
     </tbody>
 
-
   </table>
+
+  <div>
+    <%= paginate @crawler_plans %>
+  </div>
 </div>
 
 
+<script>
+  var flush_plans = function(){
+      $.ajax({
+          url:'/crawler/plans/flush',
+          method:'get',
+          data:{},
+          success:function(data){
+              if(data.ok){
+
+              }else{
+                  alert(data.msg);
+              }
+          }
+      })
+  }
+</script>

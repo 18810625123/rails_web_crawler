@@ -10,7 +10,7 @@ class HelloApi < Grape::API
 
   format :json
 
-  get 'stat_work' do
+  get 'stat_work_by_cond' do
     if params[:cond]
       t1=Time.now
       data = Crawler::Work.stat params[:cond]
@@ -19,6 +19,8 @@ class HelloApi < Grape::API
       {ok:false,msg:'缺少cond条件'}
     end
   end
+
+
 
   get 'get_users' do
     {ok:true,msg:JSON.parse(User.all.to_json) }

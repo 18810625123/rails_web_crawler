@@ -12,6 +12,9 @@ Rails.application.routes.draw do
       collection do
       end
       member do
+        get :flush_page
+        get :today_finish
+
         get :exce
         post :exce
       end

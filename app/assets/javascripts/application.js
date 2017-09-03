@@ -14,7 +14,10 @@
 //= require jquery
 
 //= require my/buttons
-//= require my/Chart
+// require my/Chart
+//= require my/echarts.min
+//= require my/maps/china
+// require my/maps/world
 // require my/faye-client
 // require my/flat-ui
 

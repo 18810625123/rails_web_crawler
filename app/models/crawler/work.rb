@@ -5,30 +5,20 @@ class Crawler::Work < ApplicationRecord
 
   cattr_accessor :address_list, :citys, :categroys, :sources
 
+
+
   def self.stat cond
     case cond
-      when 'ruby'
-        ws = Crawler::Work.where('name like "%ruby%" or name like "%rails%"')
-      when 'php'
-        ws = Crawler::Work.where('name like "%php%"')
-      when 'java'
-        ws = Crawler::Work.where('name like "%java%"')
-      when '销售'
-        ws = Crawler::Work.where('name like "%销售%"')
-      when '测试'
-        ws = Crawler::Work.where('name like "%测试%"')
-      when 'c++'
-        ws = Crawler::Work.where('name like "%c++%"')
+      when '全部'
+        ws = Crawler::Work.all
       else
-        raise ''
+        ws = Crawler::Work.where("name like '%#{cond}%'")
     end
     self.simple_stat ws, cond
   end
 
   def self.simple_stat works, cond
     t1 = Time.now
-
-    work_sum = works.size
 
     t3=Time.now
     companys = works.group(:company_name).size
@@ -40,6 +30,7 @@ class Crawler::Work < ApplicationRecord
 
 
     city_sum = citys.size
+    work_sum = citys.map{|a| a[1]}.sum
     company_sum = companys.size
 
     # 排序
@@ -49,14 +40,16 @@ class Crawler::Work < ApplicationRecord
                              size:a[1]}}
     first10_company_work_sum = companys.map{|a| a[:size]}.sum
     first10_company_names = companys.map{|a| a[:name]}
-
+    all_city_names = citys.to_a.sort{|b,a| a[1]<=>b[1]}.first(5)
+                         .map{|a| {name:a[0],
+                                   value:a[1]}}
     citys = citys.to_a.sort{|b,a| a[1]<=>b[1]}.first(5)
                 .map{|a| {name:a[0],
                           size:a[1],
                           rate:(a[1]/work_sum.to_f*100).round(2)}}
     first5_city_work_sum = citys.map{|a| a[:size]}.sum
-    first5_city_names = citys.map{|a| "#{a[:name]}-#{a[:size]}个(#{a[:rate]}%)"}
-
+    first5_city_names = citys.map{|a| {name:a[:name],value:a[:size]}}
+    first5_city_names << {name:'其它城市',value:work_sum-first5_city_work_sum}
     t8=Time.now
 
 
@@ -64,9 +57,6 @@ class Crawler::Work < ApplicationRecord
     first5_rate = (first5_city_work_sum / work_sum.to_f*100).round(2)
 
 
-    puts "招#{cond}的公司#{company_sum}个,共提供岗位#{work_sum}个,平均每家公司招#{company_aver_work_count}个\n"+
-             "这些位置共分布在#{city_sum}个城市,其中前五城市招人占比#{first5_rate}%(#{first5_city_work_sum}个),详情数据:\n"
-    citys.each{|a| puts "#{a[:name]}:\t#{a[:rate]}%(#{a[:size]}个)" }
 
     t2 = Time.now
     puts "time:#{t2-t1} #{t4-t3} #{t6-t5} #{t8-t7}"+"-----------" * 10
@@ -76,12 +66,10 @@ class Crawler::Work < ApplicationRecord
         city_total:city_sum,
         company_total:company_sum,
         company_aver_work:company_aver_work_count,
-        first5_citys:{
-            total:first5_city_work_sum,
-            names:first5_city_names,
-            rate:first5_rate,
-            results:citys
-        },
+        first5_citys:first5_city_names,
+        first5_city_work_sum:first5_city_work_sum,
+        first5_rate:first5_rate,
+        all_city_names:all_city_names,
         first10_company:{
             names:first10_company_names,
             total:first10_company_work_sum,

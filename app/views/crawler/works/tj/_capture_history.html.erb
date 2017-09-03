@@ -1,0 +1,177 @@
+
+<div class="page-header text-center">
+  <p class="lead">
+    <%= cond %>地图分布
+  </p>
+  <span id="<%= cond %>-span"></span>
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <div id="<%= cond %>-china" ></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+$(document).ready(function(){
+    $.ajax({
+        url:'/api/stat_work',
+        method:'get',
+        data:{
+            cond:'history',
+        },
+        success:function(data){
+            if(data.ok){
+
+                document.getElementById('history-span').innerHTML=`
+            全国`+data.data.city_total+`个城市在招`+data.data.cond+`岗位`+data.data.work_total+`个:<br/>
+                        其中前五个城市共招`+data.data.first5_city_work_sum+`个,占总比`+data.data.first5_rate+`%
+                `;
+                first5_citys = data.data.first5_citys
+
+                var option = {
+//                    title:{
+//                        text:'招人最多的前5个城市',
+//                        x:'center',
+//                        textStyle:{
+//                            //文字颜色
+//                            color:'orange',
+//                            //字体风格,'normal','italic','oblique'
+//                            fontStyle:'normal',
+//                            //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+//                            fontWeight:'bold',
+//                            //字体系列
+//                            fontFamily:'sans-serif',
+//                            //字体大小
+//                        　　　　 fontSize:18,
+//                        }
+//                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b}: {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+//                        orient: 'horizontal',
+                        x: 'left',
+                        data:first5_citys
+                    },
+                    series: [
+                        {
+                            name:'城市',
+                            type:'pie',
+                            radius: ['50%', '70%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                normal: {
+                                    show: false,
+                                    position: 'center'
+                                },
+                                emphasis: {
+                                    show: true,
+                                    textStyle: {
+                                        fontSize: '30',
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data:first5_citys
+                        }
+                    ]
+                };
+
+                var myChart = echarts.init(document.getElementById(cond+'-pie'));
+                myChart.setOption(option);
+
+
+
+
+
+
+    option_bar = {
+//        title:{
+//            text:'招人最多的前5个城市',
+//            x:'center',
+//            textStyle:{
+//                //文字颜色
+//                color:'orange',
+//                //字体风格,'normal','italic','oblique'
+//                fontStyle:'normal',
+//                //字体粗细 'normal','bold','bolder','lighter',100 | 200 | 300 | 400...
+//                fontWeight:'bold',
+//                //字体系列
+//                fontFamily:'sans-serif',
+//                //字体大小
+//            　　 fontSize:18,
+//            }
+//        },
+        color: ['#3398DB'],
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis : [
+            {
+                type : 'category',
+                data : first5_citys.map(function(city){return city.name}),
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'直接访问',
+                type:'bar',
+                barWidth: '60%',
+                data:first5_citys.map(function(city){return city.value})
+            },
+        ]
+    };
+
+                var myChart = echarts.init(document.getElementById(cond+'-bar'));
+                myChart.setOption(option_bar);
+
+
+
+
+                myChart.on('click', function (params) {
+                    alert(console.log(params))
+//                    window.open('https://www.baidu.com/s?wd=' + encodeURIComponent(params.name));
+                });
+                i=0;
+//                aa = window.setInterval(function(){
+//                    alert(aa+":"+i++)
+//
+//                    if(i==3){window.clearInterval(aa)}
+//                }, 2000);
+//                window.setInterval(function(){option.legend.data.pop();myChart.setOption(option);}, 2000);
+
+
+            }else{
+                alert(data.msg);
+            }
+        }
+    })
+});
+
+</script>

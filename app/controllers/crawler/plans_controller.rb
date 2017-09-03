@@ -1,67 +1,55 @@
 class Crawler::PlansController < Crawler::BaseController
-  before_action :set_crawler_plan, only: [:exce, :auto_exce, :show, :edit, :update, :destroy]
+  before_action :set_crawler_plan, only: [:today_finish, :flush_page, :exce, :auto_exce, :show, :edit, :update, :destroy]
 
   # GET /crawler/plans
   # GET /crawler/plans.json
   def index
     @crawler_plans = Crawler::Plan.all
+    @q = Crawler::Plan.includes(:website).ransack(params[:q])
+    @count = @q.result.size
+    @per = params[:per].blank? ? 50 : params[:per].to_i
+    @pagecount = @count % @per > 0 ? @count / @per + 1 : @count
+    @crawler_plans = @q.result.order(:website_id).page(params[:page]).per(@per)
   end
 
 
   # 执行采集
   def exce
-    @flag = false
     @plans = Crawler::Plan.all
-    if params[:page_a].blank? or params[:page_b].blank?
+    a = params[:page_a]
+    b = params[:page_b]
+    if a.blank? or b.blank?
       @msg = "手动采集必须填写页码a-b"
       return
     else
-      a = params[:page_a].to_i
-      b = params[:page_b].to_i
-      if @page_b.to_i < @page_a.to_i
+      a = a.to_i
+      b = b.to_i
+      if b < a
         @msg = "b页不能小于a"
         return
       end
-      include = params[:include_work_name]
-      filter = params[:filter_work_name]
+      results = @crawler_plan.exce_works(a, b, params[:include_work_name], params[:filter_work_name], params[:save_flag])
+      @works = results[:works]
+      time = results[:time]
+      data_count = @works.map{|k,v| v.size}.sum
+      if results[:ok]
+        @msg = "执行完成,共用时 #{time} 秒, 共对#{b-a+1}页进行了采集, #{data_count}条"
 
-      save_flag = params[:save_flag]
-      @works, @time = @crawler_plan.exce_works({save_flag:save_flag,page:{a:a,b:b},filter:filter,include:include})
-      @msg = "执行完成,共用时 #{@time.to_i} 秒"
-      @flag = true
+      else
+        @msg = "执行中断,止于第#{results[:error_page]}页,错误原因:#{results[:error]},共用时 #{time} 秒, 共对#{results[:error_page].to_i-a+1}页进行了采集, 处理数据#{data_count}条"
+
+      end
     end
   end
 
-  def auto_exce
-    if params[:start].blank? or params[:stop].blank? or params[:page].blank?
-      @msg = "缺少参数!"
-    else
-      start = params[:start].to_i
-      page = params[:page].to_i
-      stop = params[:stop].to_i
+  def flush_page
+    @crawler_plan.flush_page
+    redirect_to action: :index
+  end
 
-      current_page = start
-      i = 0
-      @msg = ''
-      loop do
-        @works, @time = @crawler_plan.exce_works({save_flag:'yes',page:{a:current_page,b:current_page},filter:nil,include:nil})
-        i += 1
-        current_page += 1
-        if i == page
-          @msg = "本次共采集#{i+1}页,从第#{start}页到第#{current_page}页"
-          return
-        end
-        puts "sum=#{@works.map{|k,v| v.size}.sum.size} < #{stop} ??"
-
-        if @works.map{|k,v| v.size}.sum.size < stop
-          @msg = "在采集到第#{current_page}页时,只有#{@works.size}条数据,本次共采集#{i+1}页,从第#{start}页到第#{current_page}页"
-          return
-        end
-
-      end
-      @msg += ",执行完毕"
-
-    end
+  def today_finish
+    @crawler_plan.today_finish
+    redirect_to action: :index
   end
 
   # GET /crawler/plans/1

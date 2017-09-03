@@ -6,6 +6,7 @@
 <div class="row clearfix">
   <div class="col-md-12 column">
   <%= search_form_for @q, class:'form-horizontal', method:'get' do |f| %>
+      work_hash<%= f.search_field :work_hash_eq %><br/>
       职位包含<%= f.search_field :name_cont %>
         职位不包含<%= f.search_field :name_not_cont %><br/>
 
