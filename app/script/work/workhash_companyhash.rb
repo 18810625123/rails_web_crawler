@@ -24,7 +24,7 @@ ActiveRecord::Base.logger=false
 def parse_price_scope w
   case w.website_id
     when '1' # 51job
-      if w.price_scope.include?('-')
+      if w.price_scope and w.price_scope.include?('-')
         arr = w.price_scope.split('-')
         a = arr.first.to_f
         if w.price_scope.include?('千')
@@ -40,10 +40,11 @@ def parse_price_scope w
         elsif w.price_scope.include?('月')
 
         end
+        w.price_min = a.to_i
+        w.price_max = @b.to_i
       end
-      w.price_min = a.to_i
-      w.price_max = @b.to_i
       return true
+
 
     when '2' #BOSS
       arr = w.price_scope.split('-')

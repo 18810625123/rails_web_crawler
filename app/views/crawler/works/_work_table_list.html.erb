@@ -21,8 +21,8 @@
     <% works.each_with_index do |w, i| %>
         <tr>
           <td><%= i+1 %></td>
-          <td><%= link_to w.name, w.url %></td>
-          <td><%= link_to w.company_name, w.company_url %></td>
+          <td><%= link_to w.name, w.url, target:'view_window' %></td>
+          <td><%= link_to w.company_name, w.company_url, target:'view_window' %></td>
           <td><%= w.work_hash %></td>
           <td><%= w.company_hash %></td>
           <td><%= w.city %></td>

@@ -6,7 +6,8 @@
 <div class="row clearfix">
   <div class="col-md-12 column">
   <%= search_form_for @q, class:'form-horizontal', method:'get' do |f| %>
-      work_hash<%= f.search_field :work_hash_eq %><br/>
+      work_hash<%= f.search_field :work_hash_eq %>
+      日期<%= f.search_field :send_time_eq  %><br/>
       职位包含<%= f.search_field :name_cont %>
         职位不包含<%= f.search_field :name_not_cont %><br/>
 
@@ -23,6 +24,7 @@
         <!--是否更新?<%#= f.select :tracking_eq, ['yes','no'], { :include_blank => true } %><br/>-->
 
       城市<%= f.select :address_cont, Crawler::Work.citys, { :include_blank => true } %>
+      所属计划<%= f.select :plan_id_eq, Crawler::Plan.all.map{|p| [p.name,p.id]}, { :include_blank => true } %>
       来源<%= f.select :website_id_eq, Crawler::Website.all.map{|w| [w.name,w.id]}, { :include_blank => true } %><br/>
         每页显示条数<%= number_field_tag :per, @per %><%= f.submit "搜索",class:'btn btn-default' %>
 

@@ -4,12 +4,12 @@ class Crawler::WorksController < Crawler::BaseController
   # GET /crawler/works
   # GET /crawler/works.json
   def index
-    @q = Crawler::Work.includes(:website).ransack(params[:q])
-    @count = @q.result.size
     @order = params[:order].blank? ? 'address' : params[:order]
+    @q = Crawler::Work.where("last_flag = true").order(@order).includes(:website).ransack(params[:q])
+    @count = @q.result.size
     @per = params[:per].blank? ? 50 : params[:per].to_i
     @pagecount = @count % @per > 0 ? @count / @per + 1 : @count
-    @works = @q.result.order(@order).page(params[:page]).per(@per)
+    @works = @q.result.page(params[:page]).per(@per)
   end
 
   # GET /crawler/works/1

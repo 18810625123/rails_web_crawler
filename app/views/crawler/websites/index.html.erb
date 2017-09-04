@@ -22,10 +22,10 @@
     <tbody>
     <% @crawler_websites.each_with_index do |web, i| %>
         <tr>
-          <td><%= link_to web.name, web.index_url %></td>
+          <td><%= link_to web.name, web.index_url, target:'view_window' %></td>
           <td><%= web.website_type.name %></td>
           <td><%= web.note %></td>
-          <td><%= link_to '查看', web %></td>
+          <td><%= link_to '所有采集计划', "#{crawler_plans_path}?q[website_id_eq]=#{web.id}" %></td>
           <td><%= link_to '修改', edit_crawler_website_path(web) %></td>
           <td><%= link_to '删除', web, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         </tr>

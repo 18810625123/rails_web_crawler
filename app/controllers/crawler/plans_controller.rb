@@ -4,7 +4,7 @@ class Crawler::PlansController < Crawler::BaseController
   # GET /crawler/plans
   # GET /crawler/plans.json
   def index
-    @crawler_plans = Crawler::Plan.all
+    # params[:q] = {website_id_eq:params[:website_id]} if params[:website_id]
     @q = Crawler::Plan.includes(:website).ransack(params[:q])
     @count = @q.result.size
     @per = params[:per].blank? ? 50 : params[:per].to_i
@@ -35,9 +35,9 @@ class Crawler::PlansController < Crawler::BaseController
       data_count = @works.map{|k,v| v.size}.sum
       if results[:ok]
         @msg = "执行完成,共用时 #{time} 秒, 共对#{b-a+1}页进行了采集, #{data_count}条"
-
       else
-        @msg = "执行中断,止于第#{results[:error_page]}页,错误原因:#{results[:error]},共用时 #{time} 秒, 共对#{results[:error_page].to_i-a+1}页进行了采集, 处理数据#{data_count}条"
+        @msg = "执行中断,止于第#{results[:error_page]}页,共用时 #{time} 秒, 共对#{results[:error_page].to_i-a+1}页进行了采集, 处理数据#{data_count}条
+                错误原因:#{results[:error][:title]},<br/>栈:#{results[:error][:contents]}"
 
       end
     end

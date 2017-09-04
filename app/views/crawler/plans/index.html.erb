@@ -38,17 +38,11 @@
     <% @crawler_plans.each_with_index do |p, i| %>
         <tr>
           <td><%= i+1 %></td>
-          <td><%= link_to p.name, p %></td>
+          <td><%= link_to p.name, p.http_url, target:'view_window' %></td>
           <td><%= p.page %></td>
-          <td><%= link_to p.website.name, p.website.index_url %></td>
-          <% if p.today_finish? %>
-              <td><%= '今日已完成' %></td>
-
-        <% else %>
-              <td><%= link_to '采集', exce_crawler_plan_path(p) %></td>
-              <td><%= link_to '今日已完成', today_finish_crawler_plan_path(p) %></td>
-
-        <% end %>
+          <td><%= link_to p.website.name, p.website.index_url, target:'view_window' %></td>
+          <td><%= p.today_finish? ? '完成' : (link_to '采集', exce_crawler_plan_path(p)) %></td>
+          <td><%= p.today_finish? ? '' : (link_to '今日已完成', today_finish_crawler_plan_path(p)) %></td>
           <td><%= link_to '修改', edit_crawler_plan_path(p) %></td>
           <td><%= link_to '刷新页数', flush_page_crawler_plan_path(p) %></td>
           <td><%= link_to '删除', p, method: :delete, data: { confirm: 'Are you sure?' } %></td>
