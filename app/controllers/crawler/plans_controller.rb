@@ -1,6 +1,7 @@
 class Crawler::PlansController < Crawler::BaseController
   before_action :set_crawler_plan, only: [:today_finish, :flush_page, :exce, :auto_exce, :show, :edit, :update, :destroy]
 
+  @@exec_histroy = {}
   # GET /crawler/plans
   # GET /crawler/plans.json
   def index
@@ -15,6 +16,13 @@ class Crawler::PlansController < Crawler::BaseController
 
   # 执行采集
   def exce
+    ip = request.env['HTTP_X_FORWARDED_FOR'].present? ? request.env['HTTP_X_FORWARDED_FOR'] : request.remote_ip
+    puts "ip:#{ip}, count:  #{@@exec_histroy[ip].to_s}"
+    @@exec_histroy[ip] = {page:0,count:0} if @@exec_histroy[ip].nil?
+    if @@exec_histroy[ip][:page] > 100 or @@exec_histroy[ip][:count] > 10
+      @msg = "#{ip}:每天只能尝试采集10次,或100页,您已超过了限制,请明天再来"
+      return
+    end
     @plans = Crawler::Plan.all
     a = params[:page_a]
     b = params[:page_b]
@@ -35,12 +43,14 @@ class Crawler::PlansController < Crawler::BaseController
       data_count = @works.map{|k,v| v.size}.sum
       if results[:ok]
         @msg = "执行完成,共用时 #{time} 秒, 共对#{b-a+1}页进行了采集, #{data_count}条"
+        @@exec_histroy[ip][:page] += (b-a+1)
       else
         @msg = "执行中断,止于第#{results[:error_page]}页,共用时 #{time} 秒, 共对#{results[:error_page].to_i-a+1}页进行了采集, 处理数据#{data_count}条
                 错误原因:#{results[:error][:title]},<br/>栈:#{results[:error][:contents]}"
-
+        @@exec_histroy[ip][:page] += (results[:error_page].to_i-a+1)
       end
     end
+    @@exec_histroy[ip][:count] += 1
   end
 
   def flush_page
