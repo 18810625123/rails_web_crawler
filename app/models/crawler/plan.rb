@@ -2,12 +2,12 @@ class Crawler::Plan < ApplicationRecord
   belongs_to :website
   has_many :works
 
-  WORKHASHS ||= {}
+  @@workhashs ||= {}
 
   def self.gen_work_hashs
-    if WORKHASHS.empty?
+    if @@workhashs.empty?
       Crawler::Work.order(:send_time).all.each do |w|
-        WORKHASHS[w.work_hash] = w
+        @@workhashs[w.work_hash] = w
       end
     end
   end
@@ -95,7 +95,7 @@ class Crawler::Plan < ApplicationRecord
 
         update = false
         if save_flag == 'yes'
-          old_wk = WORKHASHS[w.work_hash]
+          old_wk = @@workhashs[w.work_hash]
           if old_wk and old_wk.send_time
             if w.send_time <= old_wk.send_time
               @work_datas[:exist] << w
@@ -106,7 +106,7 @@ class Crawler::Plan < ApplicationRecord
           end
           w.last_flag = true
           if w.save
-            WORKHASHS[w.work_hash] = w
+            @@workhashs[w.work_hash] = w
             if update
               @work_datas[:update] << w
             else
