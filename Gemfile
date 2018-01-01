@@ -6,6 +6,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+# word
+gem 'word-to-markdown', '~> 1.1', '>= 1.1.7'
 # jquery bootstrap
 gem 'jquery-rails'
 gem 'bootstrap-sass', '~> 3.3', '>= 3.3.7'
@@ -15,6 +17,8 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'hpricot', '~> 0.8.6'
 # api
 gem 'grape'
+gem 'grape-swagger'
+gem 'grape-swagger-rails'
 # 加密
 gem 'bcrypt'
 gem 'ld'

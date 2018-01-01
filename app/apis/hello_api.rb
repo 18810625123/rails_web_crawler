@@ -20,8 +20,6 @@ class HelloApi < Grape::API
     end
   end
 
-
-
   get 'get_users' do
     {ok:true,msg:JSON.parse(User.all.to_json) }
   end

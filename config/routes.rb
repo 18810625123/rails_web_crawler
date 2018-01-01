@@ -49,6 +49,8 @@ Rails.application.routes.draw do
   # resources :crawler_sys, :only => [:index,:show] do
 
   mount HelloApi, at: '/api/'
+  mount VueApi, at: '/vueapi'
+  mount GrapeSwaggerRails::Engine, at: '/apidoc'
 
   root 'welcome#index'
 end
