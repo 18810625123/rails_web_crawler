@@ -6,3 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+
+unless Crawler::Menu.find_by_name 'Crawler::Menu'
+	Crawler::Menu.create name: '系统首页'
+end
